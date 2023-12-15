@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Search</title>
+  <link rel="icon" href="images/favicon.png">
+  <style>
+    .serchbox:focus{
+      background-color: rgb(239, 241, 242);
+    }
+    body>*{
+      margin: 3px;
+    }
+    form>*{
+      margin: 6px;
+    }
+  </style>
+</head>
+<body style="overflow: hidden;justic">
+
+  <div style="display: flex;justify-content: flex-end;">
+    <span>
+        <a style="margin-right: 20px;" href="image.html">Images Search</a>
+        <a  style="margin-right: 20px;" href="advanced.html">Advanced Search</a>
+    </span>
+  </div>
+
+<div style="display: flex; justify-content: center;align-items:center;flex-direction: column;height:100vh;overflow: hidden;">
+  <div >
+    <a href="https://www.google.com/"><img src="images/googleimges.png" alt="google" width="272px"></a>
+  </div>
+  <hr>
+  <div class="search">
+      <form action="https://www.google.com/search">
+        <div style="width: fit-content;" >
+          <input type="text" name="q"  style="width: 40vw;height: 4.5vh;border: 2px rgb(99, 33, 33) thin;border-radius: 20px; "autocomplete autofocus  placeholder="Search hear" class="serchbox" autocomplete="additional-name" >
+        </div>
+        <div style="display: flex;justify-content: center;">
+          <input type="submit" value="Google Search" style="border-radius:15px;margin: 30px;width: 12vw;height: 4vh;background-color: rgb(219, 214, 214);">
+          <div style="display: flex;justify-content: center;">
+            <input type="submit"  name="btnI" style="border-radius:15px;margin: 30px;width: 12vw;height: 4vh;background-color: rgb(211, 206, 206);" value="I 'am feeling lucky">
+          </div>
+        </div>
+      </form>
+  </div>
+</div>
+</body>
+</html>
