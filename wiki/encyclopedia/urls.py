@@ -4,5 +4,5 @@ from . import views
 app_name="encyclopedia"
 urlpatterns = [
     path("", views.index, name="index"),
-    path("details/<str:name>",views.show,name="details")
+    path("details/<str:name>",views.show,name="name")
 ]
