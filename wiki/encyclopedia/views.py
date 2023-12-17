@@ -4,9 +4,12 @@ from . import util
 
 
 def index(request):
+    if request.method=="POST":
+        pass
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
     })
+
 def show(request,name):
     if name in util.list_entries():
         about = util.get_entry(name)
