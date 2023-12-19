@@ -1,0 +1,11 @@
+{%extends 'encyclopedia/layout.html' %}
+{%block title%}
+Mis_match
+{%endblock%}
+{%block body%}
+<ul>
+{%for match in matchs%}
+    <li><a href={% url 'encyclopedia:details' name=match%}>{{match}}</a></li>
+{%endfor%}
+</ul>
+{%endblock%}

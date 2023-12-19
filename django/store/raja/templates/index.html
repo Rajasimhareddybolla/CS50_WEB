@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{%block title%}
+index
+{%endblock%}
+{%block body%}
+    <ol>
+    {%for member in members%}
+        <a href="details/{{member.id}}"><li>{{member.firstname}}         {{member.lastname}}</li></a>
+    {% endfor %}
+    </ol>
+{%endblock%}

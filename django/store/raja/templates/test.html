@@ -1,0 +1,23 @@
+{%extends "layout.html"%}
+
+{%load static %}
+{%block title%}
+test server
+{%endblock%}
+{%block style%}
+<link rel="stylesheet" href={%static 'main.css'%}>
+{%endblock%}
+{%block body%}
+<table border = '1' border-colapse >
+<tr>
+    <th>name</th>
+    <th>id</th>
+</tr>
+{%for member in members%}
+    <tr>
+        <td>{{member.firstname}} {{member.lastname}}</td>
+        <td>{{member.id}}</td>
+    </tr>
+{%endfor%}
+</table>
+{%endblock%}
