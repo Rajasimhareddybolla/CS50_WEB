@@ -6,6 +6,9 @@ from random import randint
 import markdown
 class search(forms.Form):
     entry = forms.CharField()
+class file(forms.Form):
+    file_name = forms.CharField(max_length=255)
+    text_area = forms.CharField(max_length=5000)
 
 def index(request):
     if request.method=="POST":
@@ -37,4 +40,17 @@ def show(request,name="search"):
 def random(request):
     names = util.list_entries()
     entry = names[randint(0,len(names))]
+    print(entry)
     return show(request,entry)
+def new(request):
+    if request.method == "POST":
+        form = file(request.POST)
+        if form.is_valid():
+            file_name = form.cleaned_data["file_name"]
+            content = form.cleaned_data["text_area"]
+        util.save_entry(file_name,content)
+        return index(request)
+    else:
+        return render(request,"encyclopedia/add.html",{
+            "feild":file,
+        })
