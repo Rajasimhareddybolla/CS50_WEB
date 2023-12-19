@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from . import util
 from django import forms
-
+from random import randint
 class search(forms.Form):
     entry = forms.CharField()
 
@@ -38,4 +38,7 @@ def show(request,name="search"):
         return render(request,"encyclopedia/match.html",{
             "matchs":match_case
         })
-            
+def random(request):
+    names = util.list_entries()
+    entry = names[randint(0,len(names))]
+    return show(request,entry)
