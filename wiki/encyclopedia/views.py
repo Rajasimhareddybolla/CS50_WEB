@@ -4,11 +4,21 @@ from . import util
 from django import forms
 from random import randint
 import markdown
+content = ""
 class search(forms.Form):
     entry = forms.CharField()
 class file(forms.Form):
     file_name = forms.CharField(max_length=255)
-    text_area = forms.CharField(max_length=5000)
+    text_area = forms.CharField(max_length=500,widget=forms.Textarea)
+
+class EditForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(EditForm, self).__init__(*args, **kwargs)
+        try:
+            contentt = args[0]
+        except:
+            contentt="enter the md code hear"
+        self.fields['content'] = forms.CharField(widget=forms.TextInput(attrs={'placeholder':contentt}))
 
 def index(request):
     if request.method=="POST":
@@ -27,20 +37,20 @@ def show(request,name="search"):
     if name.capitalize() in util.list_entries():
         about = util.get_entry(name)
         html = markdown.markdown(about)
+        html+=f"<br><form action='edit/{name}'><input type='submit' value='edit ' class='search'></form>"
         return HttpResponse(html)
     else:
         match_case = []
         for entry in util.list_entries():
-            print(entry,name.capitalize())
+            entry=entry.lower()
             if entry.find(name.lower()) != -1:
-                match_case.append(entry)
+                match_case.append(entry.capitalize())
         return render(request,"encyclopedia/match.html",{
             "matchs":match_case
         })
 def random(request):
     names = util.list_entries()
     entry = names[randint(0,len(names))]
-    print(entry)
     return show(request,entry)
 def new(request):
     if request.method == "POST":
@@ -54,3 +64,14 @@ def new(request):
         return render(request,"encyclopedia/add.html",{
             "feild":file,
         })
+def edit(request,name="edit"):
+    if request.method == "POST":
+        conten = request.POST["edited"]
+        util.save_entry(name,conten)
+        return index(request)
+    conten = util.get_entry(name)
+    print(conten)
+    return render(request,"encyclopedia/edit.html",{
+        "name" :name,
+        "content":conten
+    })
