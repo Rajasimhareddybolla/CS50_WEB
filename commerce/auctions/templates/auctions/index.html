@@ -1,7 +1,29 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
 
-    TODO
+    <h2>Active Listings</h2>
+    <ul>
+    {%for book in books%}
+     <li>
+        <div style="width:100%;display:flex ;border-thick   :2px thick red;margin-top:30px">
+            <div style="display:flex;justify-content:flex-start;">
+                <div style="width:fit-content"><a href="{% url 'view' book.Title%}"> <img src={{book.Image}} alt={{book.Title}} width=400px height400px:></div></a>
+                <div style="display:flex;justify-content:flex-start;margin-left:200px;width:50vw">
+                    <div style="display:block"><h1 style="height:fit-content;display:block"><bold>{{book.Title}}</bold></h1>
+                    <br>
+                    <h4 >{{book.Discription}}</h4> 
+                    <bold><label>Bid:</label></bold>
+                    {{book.Ammount  }}
+                </div>
+            </div>
+        </div>
+    </a>
+    <br>
+    </li>
+    <hr>
+
+    {% endfor %}
+    </ul>
+
 {% endblock %}
