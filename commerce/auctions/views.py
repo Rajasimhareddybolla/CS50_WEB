@@ -7,11 +7,19 @@ from .models import User,items
 
 
 def index(request):
+
+    if request.method == "POST":
+        name = request.POST["image"]
+        if name:
+            return render(request,"auctions/preview.html",{
+                "book":items.objects.get(Title=name)
+            })
+        return reverse(request,index)
     books = items.objects.all()
-    print(books)
     return render(request, "auctions/index.html",{
         "books":books
     })
+
 
 
 def login_view(request):
@@ -75,8 +83,3 @@ def add(request):
         item.save()
         return render(request, "auctions/index.html")
     return render(request,"auctions/add.html")
-def view(request,name):
-    print(items.objects.filter(Title=name),name)
-    return render(request,"auctions/preview.html",{
-        "book":items.objects.filter(Title=name)
-     })

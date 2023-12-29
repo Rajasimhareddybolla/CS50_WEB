@@ -4,25 +4,35 @@
 
     <h2>Active Listings</h2>
     <ul>
-    {%for book in books%}
-     <li>
-        <div style="width:100%;display:flex ;border-thick   :2px thick red;margin-top:30px">
-            <div style="display:flex;justify-content:flex-start;">
-                <div style="width:fit-content"><a href="{% url 'view' book.Title%}"> <img src={{book.Image}} alt={{book.Title}} width=400px height400px:></div></a>
-                <div style="display:flex;justify-content:flex-start;margin-left:200px;width:50vw">
-                    <div style="display:block"><h1 style="height:fit-content;display:block"><bold>{{book.Title}}</bold></h1>
-                    <br>
-                    <h4 >{{book.Discription}}</h4> 
-                    <bold><label>Bid:</label></bold>
-                    {{book.Ammount  }}
+        {% for book in books %}
+        <li>
+            <div style="width:100%; display:flex; border: 2px solid rgb(207,207,207); margin-top:30px">
+                <div style="display:flex; justify-content:flex-start;">
+                    <div style="width:fit-content">
+                        <form action="{% url 'index' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="image" value="{{ book.Title }}">
+                            <button type="submit">
+                                <div class="nice-photo-frame">
+                                    <img src="{{ book.Image }}" width="400px" height="400px"></img>
+                                </div>
+                            </button>
+                        </form>
+                    </div>
+                    <div style="display:flex; justify-content:flex-start; margin-left:200px; width:50vw">
+                        <div style="display:block">
+                            <h1 style="height:fit-content; display:block"><strong>{{ book.Title }}</strong></h1>
+                            <br>
+                            <h4>{{ book.Description }}</h4>
+                            <strong><label>Bid:</label></strong>
+                            {{ book.Ammount}}
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </a>
-    <br>
-    </li>
-    <hr>
-
+            <br>
+        </li>
+        <hr>
     {% endfor %}
     </ul>
 
