@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from .models import User,items
+from .models import User,items,bids
 
 
 def index(request):
@@ -43,6 +43,15 @@ def login_view(request):
 
 
 def logout_view(request):
+    """
+    Logs out the user and redirects to the index page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponseRedirect: Redirects to the index page.
+    """
     logout(request)
     return HttpResponseRedirect(reverse("index"))
 

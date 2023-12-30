@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{book.Title}}</title>
+    <link rel="icon" href="/static/favicon.ico">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background-color: #3498db;
+            padding: 20px;
+            text-align: center;
+            color: #fff;
+        }
+
+        section {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        img {
+            max-width: 100%;
+            height: 500px;
+            height: fit-content;
+            width: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .imgaee{
+            transition: transform 3s ease-in-out; /* Add a smooth zoom effect on hover */
+
+        }
+        img:hover{
+            padding: 0px;
+            transform: scale(1.05); /* Zoom in slightly on hover */
+        }
+        h1 {
+            color: #3498db;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #3498db;
+            color: #fff;
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1 style="color: rgb(7, 16, 13);">{{book.Title}}</h1>
+    </header>
+
+    <section>
+        <div id="imagee">
+            <img src={{book.Image}} alt="Book Cover">
+        </div>
+        <p>{{book.Discription}}...etc</p>
+        <h2> Book price &#8377; {{ book.Ammount}}</h2>
+</body>
+    <section>
+       <h5>{{bids_no}} so far.Your bid is the current bid</h5>
+
+    </section>
+    <a href="/"> Home</a>
+    <h3>Publisher {{book.user}}</h3>
+</html>

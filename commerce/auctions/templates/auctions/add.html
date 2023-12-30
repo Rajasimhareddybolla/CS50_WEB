@@ -1,0 +1,38 @@
+{% extends "auctions/layout.html" %}
+{%block body%}
+<form aciton="{%url "add" %}" method ="post">
+    {% csrf_token %}
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputEmail4">Title</label>
+                <input type="text" class="form-control" name="Title" placeholder="Title" required>
+        </div>
+
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label"> Discription</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Discription" required name="Discription"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputCity">Image URL</label>
+            <input type="text" class="form-control" id="inputCity" name="Image">
+          </div>
+          <div class="form-group col-md-2">
+            <label for="inputZip">Initial BID</label>
+            <input type="integer" class="form-control" id="inputZip" required name="Bid">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="gridCheck">
+            <label class="form-check-label" for="gridCheck">
+              Check me out
+            </label>
+          </div>
+        </div>
+        <input type="hidden" name="user" value={{request.username}}>
+        <button type="submit" class="btn btn-primary">Sign in</button>
+      </form></form>
+{%endblock%}
