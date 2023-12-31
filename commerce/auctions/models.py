@@ -18,9 +18,9 @@ class items(models.Model):
 class bids(models.Model):
     prodouct = models.ForeignKey(items,on_delete=models.CASCADE)
     user = models.ForeignKey(User,on_delete= models.CASCADE)
-    bid  = models.IntegerField(max_length=1000,null=True)
+    bid  = models.IntegerField(max_length=1000,null=True,default=0)
     comments = models.CharField(max_length=500,null=True)
-    whishlist = models.BooleanField(blank= True,null=True)
+    whishlist = models.BooleanField(default=False)
 
     def __str__(self) :
         return self.prodouct.Title +"bid by "+self.user.last_name+"bidded this one for "+(str)(self.bid)

@@ -87,21 +87,34 @@
 </body>
     <section>
        <h5>{{bids_no}} bids  so far.Your bid is the current bid</h5>
-    <form method="POST" action={%url "bid"%}>
-        {% csrf_token %}
-            <input type="hidden" value="{{book.Image}}" name="item">
-            <input type="bid" name="bid_ammount" placeholder="Enter a number" style="margin-top: 10px; padding: 5px;">
-      
-        <button type="submit" style="background-color: #3498db; color: #fff; padding: 10px 20px; font-size: 16px; border: none; cursor: pointer; border-radius: 4px; transition: background-color 0.3s ease;">Submit</button>
-    </form>
+    <div>
+        {%if is_bidded%}
+            <form method="POST" action={%url "bid"%}>
+                {% csrf_token %}
+                    <input type="hidden" value="{{book.Image}}" name="item">
+                    <input type="bid" name="bid_ammount" placeholder="Enter a number" style="margin-top: 10px; padding: 5px;">
+            
+                <button type="submit" style="background-color: #3498db; color: #fff; padding: 10px 20px; font-size: 16px; border: none; cursor: pointer; border-radius: 4px; transition: background-color 0.3s ease;">Submit</button>
+            </form>
+    
+        {%else%}
+            <h6>your already bidded for this auction for {{ammount}}</h6>
+        {%endif%}
 
+        <form method="POST" action={%url "watch_list"%}>
+            {% csrf_token %}
+                <input type="hidden" value="{{book.Image}}" name="image">
+        
+            <button type="submit" style="background-color: #3498db; color: #fff; padding: 10px 20px; font-size: 16px; border: none; cursor: pointer; border-radius: 4px; transition: background-color 0.3s ease;">{{statment}}</button>
+        </form>
+    </div>
     </section>
     <a href="/"> Home</a>
     <h3>Publisher {{book.user}}</h3>
     <div>
     <bold>Comments</bold>
     {%for comment in comments%}
-        {%if comment%}
+        {%if comment %}
         <h6>{{comment}}</h3>
         {%endif%}
     {%endfor%}

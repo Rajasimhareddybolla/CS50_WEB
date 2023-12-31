@@ -18,10 +18,25 @@ def index(request):
             comments = []
             for comment in comment_set:
                 comments.append(comment["comments"])
+            statment = ""
+            try:
+                if bids.objects.get(prodouct = book,user = request.user).whishlist:
+                    statment = "Remove from whish list"
+                else:
+                    statment="add to whish list"
+            except:
+                pass
+            try:
+                bidded = bids.objects.get(prodouct = book,user = request.user).bid 
+            except:
+                bidded = False  
             return render(request,"auctions/preview.html",{
                 "book":book,
                 "bids_no":len(book.relations.all()),
-                "comments":comments
+                "comments":comments,
+                "statment":statment,
+                "is_bided":not(bool(bidded) or book.user==request.user),
+                "ammount":bidded
             })
         return reverse(request,index)
     books = items.objects.all()
@@ -116,3 +131,18 @@ def bid(request):
         bid = bids(prodouct=prodouct, user=user,bid = bid_ammount)
         bid.save()
         return redirect("index")  # Redirect to the home page
+def watch_list(request):
+    if request.method == "POST":
+        image = request.POST.get("image")
+        prodouct = items.objects.get(Image = image)
+        user = request.user
+        bid = bids.objects.get(prodouct=prodouct,user=user)
+        try :
+            wish = bid.whishlist
+        except:
+            wish = False
+   
+        bid.whishlist=not(wish)
+        bid.save()
+        return redirect("index")
+    return 
