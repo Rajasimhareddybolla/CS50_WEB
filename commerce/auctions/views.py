@@ -25,17 +25,22 @@ def index(request):
                 else:
                     statment="add to whish list"
             except:
-                pass
-            try:
-                bidded = bids.objects.get(prodouct = book,user = request.user).bid 
-            except:
-                bidded = False  
+                statment="add to whish list"
+            
+            bidded = bids.objects.get(prodouct = book,user = request.user).bid
+            can_bid=True
+            if (bidded is None or bidded == 0):
+                can_bid=True
+                if book.user == request.user:
+                    can_bid=False
+            else:
+                can_bid=False
             return render(request,"auctions/preview.html",{
                 "book":book,
                 "bids_no":len(book.relations.all()),
                 "comments":comments,
                 "statment":statment,
-                "is_bided":not(bool(bidded) or book.user==request.user),
+                "can_bid":can_bid,
                 "ammount":bidded
             })
         return reverse(request,index)
@@ -103,7 +108,7 @@ def register(request):
                 "message": "Username already taken."
             })
         login(request, user)
-        return HttpResponseRedirect(reverse("index"))
+        return redirect("index")
     else:
         return render(request, "auctions/register.html")
 
@@ -125,7 +130,6 @@ def bid(request):
         prodouct = items.objects.get(Image=prodouct_image)
         if bid_ammount is None or prodouct is None:
             return HttpResponse("Invalid request")
-        print(prodouct.Ammount)
         if not bid_ammount >= prodouct.Ammount:
             return HttpResponse("The bid amount must be greater than or equal to the fixed amount")
         bid = bids(prodouct=prodouct, user=user,bid = bid_ammount)
@@ -136,13 +140,21 @@ def watch_list(request):
         image = request.POST.get("image")
         prodouct = items.objects.get(Image = image)
         user = request.user
-        bid = bids.objects.get(prodouct=prodouct,user=user)
         try :
+            bid = bids.objects.get(prodouct=prodouct,user=user)
             wish = bid.whishlist
         except:
+            bid = bids(prodouct=prodouct,user=user)
             wish = False
    
         bid.whishlist=not(wish)
         bid.save()
         return redirect("index")
-    return 
+    prodoucts = []
+
+    for prod in bids.objects.filter(user=request.user,whishlist=True).values("prodouct"):
+        prodoucts.append(items.objects.get(pk=prod["prodouct"]))
+    return render(request,"auctions/watch_list.html",{
+        "books":prodoucts,
+    }
+    )

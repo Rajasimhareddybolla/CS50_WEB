@@ -12,7 +12,7 @@ class items(models.Model):
     Image = models.CharField(max_length=500)
     user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="seller")
     relations = models.ManyToManyField(User,through="bids" )
-
+    # category = models.Choices(("Comedy":"Comendy","Action"))
     def __str__(self):
         return self.Title
 class bids(models.Model):
@@ -24,3 +24,4 @@ class bids(models.Model):
 
     def __str__(self) :
         return self.prodouct.Title +"bid by "+self.user.last_name+"bidded this one for "+(str)(self.bid)
+
