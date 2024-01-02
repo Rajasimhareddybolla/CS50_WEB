@@ -24,4 +24,9 @@ class bids(models.Model):
 
     def __str__(self) :
         return self.prodouct.Title +"bid by "+self.user.last_name+"bidded this one for "+(str)(self.bid)
-
+class catogeries(models.Model):
+    catogeries={"Electronics":"Electronics","Fashion":"Fashion","Home & Kitchen":"Home & Kitchen","Books & Media":"Books & Media","Health & Beauty":"Health & Beauty","Sports & Outdoors":"Sports & Outdoors","Toys & Games":"Toys & Games","Grocery & Gourmet Food":"Grocery & Gourmet Food"}
+    prodouct = models.ForeignKey(items,on_delete=models.CASCADE)
+    catogery = models.CharField(max_length=100,choices=catogeries,)
+    def __str__(self):
+        return f"{self.prodouct.Title } is in {self.catogery}"

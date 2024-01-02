@@ -1,0 +1,25 @@
+{% extends "auctions/layout.html" %}
+{% block body %}
+hello world
+<div class="dropdown show">
+    {% for cat in cats %}
+        <a  href={% url "catogerie" cat %}>{{ cat }}</a>
+    {% endfor %}
+
+</div>
+{% if books %}
+{% for book in books %}
+    <div class="row">
+        <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+            <h5 class="card-title">{{ book.title }}</h5>
+            <p class="card-text">{{ book.description }}</p>
+           
+            </div>
+        </div>
+        </div>
+    </div>
+{% endfor %}
+{% endif %}
+{% endblock %}

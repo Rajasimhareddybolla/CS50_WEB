@@ -10,5 +10,5 @@ urlpatterns = [
     path("create",views.add,name="add"),
     path("bid",views.bid,name="bid"),
     path("watch_list",views.watch_list,name="watch_list"),
-    # path("categories",views.categories,name="categories"),
+    path("catogeries:<str:cat>",views.catogerie,name="catogerie"),
 ]

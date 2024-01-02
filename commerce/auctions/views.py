@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
-from .models import User,items,bids
+from .models import User,items,bids,catogeries
 from django.shortcuts import redirect
 
 
@@ -20,6 +20,11 @@ def index(request):
                 comments.append(comment["comments"])
             statment = ""
             try:
+                bidded = bids.objects.get(prodouct = book,user = request.user).bid
+            except:
+                bidded = bids(prodouct = book,user = request.user,bid = 0)
+                bidded.save()
+            try:
                 if bids.objects.get(prodouct = book,user = request.user).whishlist:
                     statment = "Remove from whish list"
                 else:
@@ -27,7 +32,6 @@ def index(request):
             except:
                 statment="add to whish list"
             
-            bidded = bids.objects.get(prodouct = book,user = request.user).bid
             can_bid=True
             if (bidded is None or bidded == 0):
                 can_bid=True
@@ -118,10 +122,15 @@ def add(request):
         discription = request.POST["Discription"]
         image = request.POST["Image"]
         ammount = request.POST["Bid"]
+        desired_catogires = request.POST["categories"]
         item = items(Title = title,Discription=discription,Ammount=ammount,Image = image,user= request.user)
+        obj = catogeries(prodouct=item,catogery=desired_catogires)
+
         item.save()
+        obj.save()
         return render(request, "auctions/index.html")
-    return render(request,"auctions/add.html")
+    return render(request,"auctions/add.html",{"catogeries":catogeries.catogeries.values()}
+                  )
 def bid(request):
     if request.method == "POST":
         bid_ammount = int(request.POST.get("bid_ammount"))
@@ -158,3 +167,21 @@ def watch_list(request):
         "books":prodoucts,
     }
     )
+def catogerie(request,cat):
+
+    if cat !="raja":
+        print(cat)
+        prodoucts = []
+        for prod in catogeries.objects.filter(catogery=cat):
+            prodoucts.append(prod.prodouct)
+        print(prodoucts)
+        return render(request,"auctions/catogeries.html",{
+            "books":prodoucts,
+            "catogires":catogeries.catogeries
+        })
+
+    elif cat == "raja":
+        return render(request,"auctions/catogeries.html",{
+
+            "cats":catogeries.catogeries.values()
+        })
