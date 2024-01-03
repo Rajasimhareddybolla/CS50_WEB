@@ -1,25 +1,44 @@
+
 {% extends "auctions/layout.html" %}
 {% block body %}
-hello world
 <div class="dropdown show">
     {% for cat in cats %}
         <a  href={% url "catogerie" cat %}>{{ cat }}</a>
     {% endfor %}
 
 </div>
+<h2>{{cat}}</h2>
+
 {% if books %}
 {% for book in books %}
-    <div class="row">
-        <div class="col-sm-6">
-        <div class="card">
-            <div class="card-body">
-            <h5 class="card-title">{{ book.title }}</h5>
-            <p class="card-text">{{ book.description }}</p>
-           
+<li>
+    <div style="width:100%; display:flex; border: 2px solid rgb(207,207,207); margin-top:30px">
+        <div style="display:flex; justify-content:flex-start;">
+            <div style="width:fit-content">
+                <form action="{% url 'index' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="image" value="{{ book.Title }}">
+                    <button type="submit">
+                        <div class="nice-photo-frame">
+                            <img src="{{ book.Image }}" width="100px" ></img>
+                        </div>
+                    </button>
+                </form>
+            </div>
+            <div style="display:flex; justify-content:flex-start; margin-left:200px; width:50vw">
+                <div style="display:block">
+                    <h1 style="height:fit-content; display:block"><strong>{{ book.Title }}</strong></h1>
+                    <br>
+                    <h4>{{ book.Description }}</h4>
+                    <strong><label>Bid:</label></strong>
+                    {{ book.Ammount}}
+                </div>
             </div>
         </div>
-        </div>
     </div>
+    <br>
+</li>
+<hr>
 {% endfor %}
 {% endif %}
 {% endblock %}

@@ -170,14 +170,15 @@ def watch_list(request):
 def catogerie(request,cat):
 
     if cat !="raja":
-        print(cat)
         prodoucts = []
+        print(catogeries.objects.filter(catogery=cat))
         for prod in catogeries.objects.filter(catogery=cat):
             prodoucts.append(prod.prodouct)
         print(prodoucts)
         return render(request,"auctions/catogeries.html",{
             "books":prodoucts,
-            "catogires":catogeries.catogeries
+            "cats":catogeries.catogeries.values(),
+            "cat":cat
         })
 
     elif cat == "raja":
