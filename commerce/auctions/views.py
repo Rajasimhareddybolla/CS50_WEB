@@ -24,6 +24,7 @@ def index(request):
             except:
                 bidded = bids(prodouct = book,user = request.user,bid = 0)
                 bidded.save()
+            bidded = bids.objects.get(prodouct = book,user = request.user).bid
             try:
                 if bids.objects.get(prodouct = book,user = request.user).whishlist:
                     statment = "Remove from whish list"
@@ -33,19 +34,35 @@ def index(request):
                 statment="add to whish list"
             
             can_bid=True
+            is_author = False
             if (bidded is None or bidded == 0):
                 can_bid=True
                 if book.user == request.user:
                     can_bid=False
+                    is_author = True
             else:
                 can_bid=False
+            prev_bids = bids.objects.filter(prodouct=book).values("bid","user") 
+            print(prev_bids )
+            winner = None
+            ammou = None    
+            if book.Discription == "CLSOSED":
+                max = bids.objects.filter(prodouct=book).order_by("bid").last()
+                winner = max.user
+                ammou = max.bid 
+                print(winner,ammou)
             return render(request,"auctions/preview.html",{
                 "book":book,
                 "bids_no":len(book.relations.all()),
                 "comments":comments,
                 "statment":statment,
                 "can_bid":can_bid,
-                "ammount":bidded
+                "ammount":bidded,
+                "is_author":is_author,
+                "prev":prev_bids,
+                "winneer":winner,
+                "ammou":ammou,
+                "is_closed":book.Discription == "CLSOSED"
             })
         return reverse(request,index)
     books = items.objects.all()
@@ -123,9 +140,9 @@ def add(request):
         image = request.POST["Image"]
         ammount = request.POST["Bid"]
         desired_catogires = request.POST["categories"]
-        item = items(Title = title,Discription=discription,Ammount=ammount,Image = image,user= request.user)
+        item  = items(Title = title,Discription=discription,Ammount=ammount,Image = image,user= request.user)
+  
         obj = catogeries(prodouct=item,catogery=desired_catogires)
-
         item.save()
         obj.save()
         return render(request, "auctions/index.html")
@@ -141,7 +158,8 @@ def bid(request):
             return HttpResponse("Invalid request")
         if not bid_ammount >= prodouct.Ammount:
             return HttpResponse("The bid amount must be greater than or equal to the fixed amount")
-        bid = bids(prodouct=prodouct, user=user,bid = bid_ammount)
+        bid = bids.objects.get(prodouct=prodouct, user=user)
+        bid.bid = bid_ammount
         bid.save()
         return redirect("index")  # Redirect to the home page
 def watch_list(request):
@@ -186,3 +204,11 @@ def catogerie(request,cat):
 
             "cats":catogeries.catogeries.values()
         })
+def close(request):
+    if request.method  == "POST":
+        image = request.POST.get("url")
+        prodouct=items.objects.get(Image=image)
+        print(prodouct.Discription)
+        prodouct.Discription="CLSOSED"
+        prodouct.save()
+    return redirect("index")
