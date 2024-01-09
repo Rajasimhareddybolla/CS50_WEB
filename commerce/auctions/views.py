@@ -3,13 +3,11 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
-
+from . import admin
 from .models import User,items,bids,catogeries
 from django.shortcuts import redirect
 
-
 def index(request):
-
     if request.method == "POST":
         name = request.POST["image"]
         if name:
@@ -19,20 +17,25 @@ def index(request):
             for comment in comment_set:
                 comments.append(comment["comments"])
             statment = ""
-            try:
+            if request.user.is_authenticated:
+                try:
+                    bidded = bids.objects.get(prodouct = book,user = request.user).bid
+                except:
+                    bidded = bids(prodouct = book,user = request.user,bid = 0)
+                    bidded.save()
                 bidded = bids.objects.get(prodouct = book,user = request.user).bid
-            except:
-                bidded = bids(prodouct = book,user = request.user,bid = 0)
-                bidded.save()
-            bidded = bids.objects.get(prodouct = book,user = request.user).bid
-            try:
-                if bids.objects.get(prodouct = book,user = request.user).whishlist:
-                    statment = "Remove from whish list"
-                else:
+                try:
+                    if bids.objects.get(prodouct = book,user = request.user).whishlist:
+                        statment = "Remove from whish list"
+                    else:
+                        statment="add to whish list"
+                except:
                     statment="add to whish list"
-            except:
-                statment="add to whish list"
-            
+                prev_bids = bids.objects.filter(prodouct=book).values("bid","user") 
+
+            else:
+                prev_bids = "login to bid the item"
+                bidded=0
             can_bid=True
             is_author = False
             if (bidded is None or bidded == 0):
@@ -42,15 +45,14 @@ def index(request):
                     is_author = True
             else:
                 can_bid=False
-            prev_bids = bids.objects.filter(prodouct=book).values("bid","user") 
             print(prev_bids )
             winner = None
-            ammou = None    
+            ammou = None   
+
             if book.Discription == "CLSOSED":
                 max = bids.objects.filter(prodouct=book).order_by("bid").last()
                 winner = max.user
                 ammou = max.bid 
-                print(winner,ammou)
             return render(request,"auctions/preview.html",{
                 "book":book,
                 "bids_no":len(book.relations.all()),
@@ -62,11 +64,11 @@ def index(request):
                 "prev":prev_bids,
                 "winneer":winner,
                 "ammou":ammou,
+                # "log":logged_in,
                 "is_closed":book.Discription == "CLSOSED"
             })
         return reverse(request,index)
     books = items.objects.all()
-    
     return render(request, "auctions/index.html",{
         "books":books
     })
@@ -83,9 +85,15 @@ def login_view(request):
 
         # Check if authentication successful
         if user is not None:
+            print(username)
+            user = User.objects.get(username = username)
+            if user.is_superuser:
+                admin.activate = True
+                print(admin.activate)
             login(request, user)
             return HttpResponseRedirect(reverse("index"))
         else:
+
             return render(request, "auctions/login.html", {
                 "message": "Invalid username and/or password."
             })
@@ -185,6 +193,10 @@ def watch_list(request):
         "books":prodoucts,
     }
     )
+def permmisions():
+    for user in User.objects.all:
+        if not user.is_superuser:
+            user.perm
 def catogerie(request,cat):
 
     if cat !="raja":

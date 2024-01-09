@@ -4,6 +4,6 @@ app_name= "task"
 #<a herf="{%url 'task:index'%}">index </a>
 urlpatterns = [
     path("",views.index,name="index"),
-    path("add/",views.add,name="add")
+    path("add",views.add,name="add")
 ]
 

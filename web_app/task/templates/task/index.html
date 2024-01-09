@@ -1,9 +1,22 @@
 {% extends  "task/layout.html"%}
 {%block body%}
 <ul>
-{%for task in tasks%}
-{{task}}
-{% endfor %}
+
 </ul>
-<h1><a href="{%url 'task:add'%}"> add a new task </a></h1>
+<form action="{%url 'task:add'%}" method= 'post'>
+    {%csrf_token %}
+    <label>enter your name</lable>
+    <input type="text" name="name" placeholder="enter a player name">
+    <label>enter your age</lable>
+    <input type="integer" name="age">
+    <input type="submit">
+</form>
+<br>
+    {%endblock%}
+{%block content%}
+<ul>
+    {%for player in players%}
+        <li>{{player.name}} and having age of {{player.price}}</li>
+    {%endfor%}
+</ul>
 {%endblock%}

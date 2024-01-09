@@ -79,7 +79,7 @@
 
     <section>
         <div id="imagee">
-            <img src={{book.Image}} alt="Book Cover">
+            <img src={{book.Image}} height=40 width=20 alt="Book Cover">
         </div>
         <p>{{book.Discription}}...etc</p>
         <h2> Book price &#8377; {{ book.Ammount}}</h2>
@@ -92,7 +92,7 @@
         <section>
         <h5>{{bids_no}} bids  so far.Your bid is the current bid</h5>
         <div>
-            {%if can_bid%}
+            {%if can_bid %}
                 <form method="POST" action={%url "bid"%}>
                     {% csrf_token %}
                         <input type="hidden" value="{{book.Image}}" name="item">
@@ -101,15 +101,18 @@
                     <button type="submit" style="background-color: #3498db; color: #fff; padding: 10px 20px; font-size: 10px; border: none; cursor: pointer; border-radius: 4px; transition: background-color 0.3s ease;">Submit</button>
                 </form>
         
-            {%else%}
+            {%elif not can_bid%}
                 <h6>your already bidded for this auction for {{ammount}}</h6>
+  
             {%endif%}
-            <form method="POST" action={%url "watch_list"%}>
-                {% csrf_token %}
-                    <input type="hidden" value="{{book.Image}}" name="image">
-            
-                <button type="submit" style="background-color: #3498db; color: #fff; padding: 10px 20px; font-size: 8px; border: none; cursor: pointer; border-radius: 4px; transition: background-color 0.3s ease;">{{statment}}</button>
-            </form>
+            {%if user%}
+                <form method="POST" action={%url "watch_list"%}>
+                    {% csrf_token %}
+                        <input type="hidden" value="{{book.Image}}" name="image">
+                
+                    <button type="submit" style="background-color: #3498db; color: #fff; padding: 10px 20px; font-size: 8px; border: none; cursor: pointer; border-radius: 4px; transition: background-color 0.3s ease;">{{statment}}</button>
+                </form>
+                {%endif%}
         </div>
         </section>
         <a href="/"> Home</a>

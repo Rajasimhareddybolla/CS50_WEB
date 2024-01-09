@@ -2,27 +2,22 @@ from django.shortcuts import render
 from django import forms
 from django.http import HttpResponse
 from django.urls import reverse
+from .models import prod
 # Create your views here.
 #create forms instead of using html 
-class NewTaskForm(forms.Form):
-  task=forms.CharField(label="task")
-  age = forms.IntegerField(max_value=2,min_value=1)
+
 def index(request):
   if "task" not in request.session:
     request.session["task"]=[]
+  players = prod.objects.all().values("name","price")
   return render(request,"task/index.html",{
-    "task":request.session["task"]
+    "task":request.session["task"],
+    "players":players
   })
 def add(request):
-  if request.method == "POST":
-    form  = NewTaskForm(request.POST)
-    if form.is_valid():
-      task = form.cleaned_data["task"]
-      request.session["task"] += [task]
-    else:
-      return render(request,"task/add.html",{
-        "form":form
-      })
-  return render(request,"task/add.html",{
-    "name":NewTaskForm()
-  })
+  if request.method== "POST":
+    name = request.POST["name"]
+    age = request.POST["age"]
+    prod1 = prod(name=name,price=age)
+    prod1.save()
+    return HttpResponse("added")
