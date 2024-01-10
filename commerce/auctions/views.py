@@ -64,7 +64,7 @@ def index(request):
                 "prev":prev_bids,
                 "winneer":winner,
                 "ammou":ammou,
-                # "log":logged_in,
+                 "log":request.user.is_authenticated,
                 "is_closed":book.Discription == "CLSOSED"
             })
         return reverse(request,index)

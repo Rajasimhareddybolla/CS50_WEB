@@ -92,7 +92,7 @@
         <section>
         <h5>{{bids_no}} bids  so far.Your bid is the current bid</h5>
         <div>
-            {%if can_bid %}
+            {%if can_bid and log%}
                 <form method="POST" action={%url "bid"%}>
                     {% csrf_token %}
                         <input type="hidden" value="{{book.Image}}" name="item">
@@ -103,9 +103,10 @@
         
             {%elif not can_bid%}
                 <h6>your already bidded for this auction for {{ammount}}</h6>
-  
+            {%elif not log%}
+                <h6>you must login before bid</h6>
             {%endif%}
-            {%if user%}
+            {%if user and log%}
                 <form method="POST" action={%url "watch_list"%}>
                     {% csrf_token %}
                         <input type="hidden" value="{{book.Image}}" name="image">
