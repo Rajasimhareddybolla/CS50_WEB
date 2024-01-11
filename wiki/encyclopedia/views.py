@@ -4,6 +4,9 @@ from . import util
 from django import forms
 from random import randint
 import markdown
+from django.shortcuts import render
+import markdown
+from . import util
 content = ""
 class search(forms.Form):
     entry = forms.CharField()
@@ -15,9 +18,12 @@ class EditForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(EditForm, self).__init__(*args, **kwargs)
         try:
-            contentt = args[0]
+            contentt = []
+            for line in args[0]:
+                content.append(line)
         except:
             contentt="enter the md code hear"
+
         self.fields['content'] = forms.CharField(widget=forms.TextInput(attrs={'placeholder':contentt}))
 
 def index(request):
@@ -28,29 +34,31 @@ def index(request):
         "search":search(),
     })
 
-def show(request,name="search"):
+def show(request, name="search"):
     name = name
-    if request.method == "POST" and name=="search":
+    if request.method == "POST" and name == "search":
         form = search(request.POST)
         if form.is_valid():
-            name=form.cleaned_data["entry"]
+            name = form.cleaned_data["entry"]
     if name.capitalize() in util.list_entries():
         about = util.get_entry(name)
         html = markdown.markdown(about)
-        html+=f"<br><form action='edit/{name}'><input type='submit' value='edit ' class='search'></form>"
-        return HttpResponse(html)
+        return render(request, "encyclopedia/preview.html", {
+            'nam': name,
+            'md': html,
+        })
     else:
         match_case = []
         for entry in util.list_entries():
-            entry=entry.lower()
+            entry = entry.lower()
             if entry.find(name.lower()) != -1:
                 match_case.append(entry.capitalize())
-        return render(request,"encyclopedia/match.html",{
-            "matchs":match_case
+        return render(request, "encyclopedia/match.html", {
+            "matchs": match_case
         })
 def random(request):
     names = util.list_entries()
-    entry = names[randint(0,len(names))]
+    entry = names[randint(0,len(names)-1)]
     return show(request,entry)
 def new(request):
     if request.method == "POST":
@@ -72,6 +80,6 @@ def edit(request,name="edit"):
     conten = util.get_entry(name)
     print(conten)
     return render(request,"encyclopedia/edit.html",{
-        "name" :name,
+        "name" :name.capitalize,
         "content":conten
     })

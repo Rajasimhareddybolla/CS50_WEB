@@ -1,15 +1,14 @@
 {% extends "encyclopedia/layout.html" %}
 {% block  title %}
-EDIT
+{{name}}
 {% endblock%}
 {%block body%}
 <form action = {%url "encyclopedia:edit" name%} method="post">
     {%csrf_token%}
-    {{name}}
     <br>
-    {{content}}
+   <h2> {{name}}</h2>
     <br>
-    <input type="text" value="{{content}}" name="edited" style="height:500px;width:80%">
+    <textarea name="edited" rows="3" columns="50" style="height:150px;width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">{% for con in content %}{{ con }}{% endfor %}</textarea>
     <input type="submit" class="search">
 </form>
 

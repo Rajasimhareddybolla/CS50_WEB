@@ -1,0 +1,10 @@
+{%extends 'encyclopedia/layout.html' %}
+{%block title%}
+{{nam}}
+{%endblock%}
+{%block body%}
+{{ md|safe }}
+<form action="{% url 'encyclopedia:edit' name=nam %}">
+    <input type='submit' value='edit' class='search' style='width:60px;background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;'>
+</form>
+{%endblock%}
