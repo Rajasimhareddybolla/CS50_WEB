@@ -78,7 +78,6 @@ def edit(request,name="edit"):
         util.save_entry(name,conten)
         return index(request)
     conten = util.get_entry(name)
-    print(conten)
     return render(request,"encyclopedia/edit.html",{
         "name" :name.capitalize,
         "content":conten
