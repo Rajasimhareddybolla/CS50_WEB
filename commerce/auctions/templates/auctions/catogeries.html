@@ -2,11 +2,14 @@
 {% extends "auctions/layout.html" %}
 {% block body %}
 <div class="dropdown show">
+    <ul>
     {% for cat in cats %}
-        <a  href={% url "catogerie" cat %}>{{ cat }}</a>
+        <li><a  href={% url "catogerie" cat %}>{{ cat }}</a></li>
     {% endfor %}
-
+    </ul>
 </div>
+<hr>
+
 <h2>{{cat}}</h2>
 
 {% if books %}

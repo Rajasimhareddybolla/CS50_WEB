@@ -38,7 +38,10 @@
         transition: transform 3s ease-in-out; /* Add a smooth zoom effect on hover */
 
     }
-
+    img:hover{
+        padding: 0px;
+        transform: scale(1.05); /* Zoom in slightly on hover */
+    }
     h1 {
         color: #3498db;
     }
@@ -68,14 +71,14 @@
 
 <section>
     <div id="imagee">
-        <img src={{book.Image}} height=50px  alt="Book Cover">
+        <img src={{book.Image}} height=40 width=20 alt="Book Cover">
     </div>
     <p>{{book.Discription}}...etc</p>
-    <h2> BID:  &#8377; {{ book.Ammount}}</h2>
+    <h2> Book price &#8377; {{ book.Ammount}}</h2>
 </body>
 {%if is_closed%}
     <div>
-        <h3>Max bid is by <bold>{{winner}}</bold> for the ammount of <bold>{{ammou}}</boldx></h3>
+        <h3>Max bid is by {{winner}} for the ammount of {{ammou}}</h3>
     </div>
 {%else%}
     <section>
@@ -105,16 +108,15 @@
             {%endif%}
     </div>
     </section>
-    <ul><h5>Publisher {{book.user}}</h5></ul>
+    <a href="/"> Home</a>
+    <h3>Publisher {{book.user}}</h3>
     <div>
-    <h3><bold>Comments</bold></h3>
-    <ul>
+    <bold>Comments</bold>
     {%for comment in comments%}
         {%if comment %}
-        <li><bold><h5>{{comment}}</h5></bold></li>
+        <h4>{{comment}}</h4>
         {%endif%}
     {%endfor%}
-    </ul>
     </div>
     <div>
     {%if is_author%}

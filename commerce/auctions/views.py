@@ -45,10 +45,11 @@ def index(request):
                     is_author = True
             else:
                 can_bid=False
-            print(prev_bids )
             winner = None
             ammou = None   
-
+            comment = False
+            if request.user.is_authenticated :
+                comment = True
             if book.Discription == "CLSOSED":
                 max = bids.objects.filter(prodouct=book).order_by("bid").last()
                 winner = max.user
@@ -56,6 +57,7 @@ def index(request):
             return render(request,"auctions/preview.html",{
                 "book":book,
                 "bids_no":len(book.relations.all()),
+                "winner":winner,
                 "comments":comments,
                 "statment":statment,
                 "can_bid":can_bid,
@@ -64,7 +66,8 @@ def index(request):
                 "prev":prev_bids,
                 "winneer":winner,
                 "ammou":ammou,
-                 "log":request.user.is_authenticated,
+                "comment":comment,
+                "log":request.user.is_authenticated,
                 "is_closed":book.Discription == "CLSOSED"
             })
         return reverse(request,index)
@@ -85,11 +88,9 @@ def login_view(request):
 
         # Check if authentication successful
         if user is not None:
-            print(username)
             user = User.objects.get(username = username)
             if user.is_superuser:
                 admin.activate = True
-                print(admin.activate)
             login(request, user)
             return HttpResponseRedirect(reverse("index"))
         else:
@@ -201,10 +202,9 @@ def catogerie(request,cat):
 
     if cat !="raja":
         prodoucts = []
-        print(catogeries.objects.filter(catogery=cat))
         for prod in catogeries.objects.filter(catogery=cat):
             prodoucts.append(prod.prodouct)
-        print(prodoucts)
+
         return render(request,"auctions/catogeries.html",{
             "books":prodoucts,
             "cats":catogeries.catogeries.values(),
@@ -220,7 +220,15 @@ def close(request):
     if request.method  == "POST":
         image = request.POST.get("url")
         prodouct=items.objects.get(Image=image)
-        print(prodouct.Discription)
         prodouct.Discription="CLSOSED"
         prodouct.save()
     return redirect("index")
+def comment(request):
+    user = request.user
+    prodouct = items.objects.get(Image= request.POST["prodouct"])
+    comment = request.POST["comment"]
+    bid = bids.objects.get(prodouct=prodouct,user=user)
+    bid.comments =comment
+    bid.save()
+
+    return redirect(index)

@@ -169,7 +169,6 @@ def register(request):
             user = User.objects.create_user(email, email, password)
             user.save()
         except IntegrityError as e:
-            print(e)
             return render(request, "mail/register.html", {
                 "message": "Email address already taken."
             })
