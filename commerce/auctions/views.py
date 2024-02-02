@@ -6,6 +6,7 @@ from django.urls import reverse
 from . import admin
 from .models import User,items,bids,catogeries
 from django.shortcuts import redirect
+from django.views.decorators.csrf import csrf_exempt
 
 def index(request):
     if request.method == "POST":
@@ -194,10 +195,7 @@ def watch_list(request):
         "books":prodoucts,
     }
     )
-def permmisions():
-    for user in User.objects.all:
-        if not user.is_superuser:
-            user.perm
+
 def catogerie(request,cat):
 
     if cat !="raja":
@@ -223,6 +221,7 @@ def close(request):
         prodouct.Discription="CLSOSED"
         prodouct.save()
     return redirect("index")
+@csrf_exempt
 def comment(request):
     user = request.user
     prodouct = items.objects.get(Image= request.POST["prodouct"])

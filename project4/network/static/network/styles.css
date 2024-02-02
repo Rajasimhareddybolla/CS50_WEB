@@ -1,0 +1,39 @@
+#msg{
+    margin-left: 50px;
+}
+#msg, #profile {
+    margin: 20px;
+    width: 90%;
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.content {
+    background-color: rgb(252, 255, 255);
+    border-bottom: 1px dashed #ccc;
+}
+
+.upp {
+    display: flex;
+    justify-content: center;
+}
+
+button {
+    border: none;
+    background-color: rgb(181, 181, 181);
+    color: #fff;
+    height: 30px; /* Adjust the height to make the button smaller */
+    width: 100px; /* Adjust the width to make the button smaller */
+    text-decoration: none;
+    border-radius: 5px;
+    padding: 5px 10px; /* Adjust the padding to make the button smaller */
+    margin: 6px;
+    cursor: pointer;
+    /* Add additional styles to improve the button's appearance */
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+

@@ -1,0 +1,79 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+{%if user.is_authenticated and exe%}
+    <div class="upp">
+        <div style="background-color: #f2f2f2; width:100%;padding: 20px;">
+            <form id="new">
+                <textarea id="content" style="width:80%;height:10rem" placeholder ="new post" ></textarea>
+                <input id="new_submit"type="submit" style="background-color:skyblue; color:white; padding:10px; border:none; border-radius:5px; cursor:pointer;">
+            </form>
+        </div>
+    </div>
+
+{%endif%}
+
+{%if data%}
+    <div id="profile" style="display:block; margin-top: 20px; width:90%">
+        <div style="display:flex; justify-content:center;">
+            <h2 id="user_name"  style="font-weight: bold; margin-right: 10px;">{{data.user}}</h2>
+            {% if data.is_foll != -1 and user.is_authenticated %}
+
+                <button class="profile_follow"  value ={{data.pk}} style="background-color: skyblue; color: white; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer;">
+                    {% if data.is_foll%}
+                        Un_Follow
+                    {%  else %}
+                        Follow
+                    {%endif%}
+                </button>
+            {%endif%}
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-top: 10px;">
+            <h4 id="Following" safe style="margin-right: 20px;">Following: 👫🏽 {{data.following}}</h4>
+            <h4 id="Followers" safe style="margin-left: 20px;">Followers: 👫🏽 {{data.followers}}</h4>
+        </div>
+    </div>
+{%endif%}
+<div>
+    <nav aria-label="Page navigation example" style="margin-top:10px;margin-right:20rex">
+        <ul class="pagination justify-content-end">
+            {% if page_obj.has_previous %}
+                <li class="page-item ">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+                <li>
+                    <a class="page-link" href="?page=1" tabindex="-1" aria-disabled="true">1</a>
+
+                </li>
+          {%endif%}
+            <span class="current" style="align-content:center">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next_page</a></li>
+                <li class="page-item"><a class="page-link"href="?page={{ page_obj.paginator.num_pages }}">last</a></li>
+            {%endif%}
+        </ul>
+      </nav>
+</div>
+<div id="msg">
+    {%for post in page_obj%}
+    <div class="content">    
+        <a href="{% url 'profile' name=post.user.username %}" ><h2>{{post.user.username}}</h2></a>
+        <span style="display:flex;justify-content:space-between">
+            <h5 >{{post.content}}</h5>
+        {%if user == post.user%}
+            <button class="edit_post" value={{post.pk}}>edit</button>
+        {%endif%}
+        </span>
+        <h5>{{post.time}}</h5>
+        {%if user.is_authenticated%}
+            <button class="like_post" style="background-color:white;border-color:none" value={{post.pk}}> <h6 style="display:inline">❤️</h6><h5 id="like_count" style="display:inline;color:black">{{post.likes}}</h5></button>
+        {%else%}
+            <h6 style="display:inline">❤️</h6><h5 id="like_count" style="display:inline">{{post.likes}}</h5>
+        {%endif%}
+    </div>
+{% endfor%}
+</div>
+
+{% endblock %}

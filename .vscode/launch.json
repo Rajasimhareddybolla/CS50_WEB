@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/rajasimha/Documents/cs50/CS50_WEB/CS50_WEB/daily_challenge",
+      "program": "/Users/rajasimha/Documents/cs50/CS50_WEB/CS50_WEB/daily_challenge/build/Debug/outDebug"
+    }
+  ]
+}
